@@ -1,0 +1,17 @@
+__pycache__*
+*.pyc
+*.gz
+dict
+dist/*
+.DS_Store
+.venv/
+.env
+.coverage
+coverage.xml
+.pytest_cache/
+.vim
+.idea/
+poetry.lock
+lib64/
+lib/
+bin/
