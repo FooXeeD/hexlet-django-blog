@@ -3,7 +3,7 @@ from django.views import View
 from django.shortcuts import redirect
 from django.urls import reverse
 from hexlet_django_blog.article.models import Article
-
+from hexlet_django_blog.article.forms import ArticleForm
 
 class IndexView(View):
 
@@ -21,3 +21,17 @@ class ArticleView(View):
         return render(request, 'articles/show.html', context={
             'article': article,
         })
+    
+
+class ArticleFormCreateView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = ArticleForm()
+        return render(request, 'articles/create.html', {'form': form})
+    
+    def post(self, request, *args, **kwargs):
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('articles_list')
+        return render(request, 'articles/create.html', {'form': form})
