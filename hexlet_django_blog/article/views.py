@@ -37,3 +37,36 @@ class ArticleFormCreateView(View):
             messages.success(request, "Статья успешно добавлена")
             return redirect('articles_list')
         return render(request, 'articles/create.html', {'form': form})
+    
+
+class ArticleFormEditView(View):
+
+    def get(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(instance=article)
+        return render(request, 'articles/update.html',
+                      {'form': form, 'article_id': article_id})
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Статья изменена')
+            return redirect('articles_list')
+
+        messages.warning(request, 'Проверьте данные')
+        return render(request, 'articles/update.html',
+                      {'form': form, 'article_id': article_id})
+
+
+class ArticleFormDeleteView(View):
+
+    def post(self, request, *args, **kwargs):
+        article = Article.objects.get(id=kwargs.get('id'))
+        if article:
+            article.delete()
+            messages.success(request, 'Статья удалена')
+        return redirect('articles_list')
